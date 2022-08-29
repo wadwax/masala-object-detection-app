@@ -1,0 +1,13 @@
+import { error, json } from "@sveltejs/kit";
+import { runTask } from "../../../lib/masala";
+
+export async function POST({ request }) {
+  const { requestId, credentials } = await request.json();
+
+  try {
+    const response = await runTask(requestId, credentials);
+    return json(response.data);
+  } catch (e) {
+    throw error(e.status || 500, e.message || e.toString);
+  }
+}
